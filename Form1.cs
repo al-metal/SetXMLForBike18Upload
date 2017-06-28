@@ -12,9 +12,25 @@ namespace SetXMLForBike18Upload
 {
     public partial class Form1 : Form
     {
+        string fileUrlsAllProducts;
+        string fileUrlsNewProducts;
+
+
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void btnOpenAllProducts_Click(object sender, EventArgs e)
+        {
+            fileUrlsAllProducts = "";
+            ofdAllProducts.ShowDialog();
+        }
+
+        private void btnLoadNewProduct_Click(object sender, EventArgs e)
+        {
+            fileUrlsNewProducts = "";
+            ofdNewProduct.ShowDialog();
         }
     }
 }
