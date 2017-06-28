@@ -72,7 +72,26 @@ namespace SetXMLForBike18Upload
 
             tbHistory.Invoke(new Action(() => tbHistory.AppendText("Количество строк в файле = " + newTovars.Length + "\n")));
 
+            ActualSLUG(w, newTovars);
+
             ControlsFormEnabledTrue();
+        }
+
+        private void ActualSLUG(ExcelWorksheet w, string[] newTovars)
+        {
+            int countAllT = w.Dimension.Rows;
+
+            for (int i = 1; newTovars.Length > i; i++)
+            {
+                string[] newTovarStr = newTovars[i].ToString().Split(';');
+                string slugNewT = newTovarStr[newTovarStr.Length - 5];
+
+                for(int n = 1; countAllT > n; n++)
+                {
+                    string chpuAllT = (string)w.Cells[i, 3].Value;
+                }
+
+            }
         }
 
         private void ControlsFormEnabledTrue()
