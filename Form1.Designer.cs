@@ -32,6 +32,7 @@
             this.ofdNewProduct = new System.Windows.Forms.OpenFileDialog();
             this.btnOpenAllProducts = new System.Windows.Forms.Button();
             this.btnLoadNewProduct = new System.Windows.Forms.Button();
+            this.btnUpdateSLUG = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ofdAllProducts
@@ -62,11 +63,22 @@
             this.btnLoadNewProduct.UseVisualStyleBackColor = true;
             this.btnLoadNewProduct.Click += new System.EventHandler(this.btnLoadNewProduct_Click);
             // 
+            // btnUpdateSLUG
+            // 
+            this.btnUpdateSLUG.Location = new System.Drawing.Point(171, 12);
+            this.btnUpdateSLUG.Name = "btnUpdateSLUG";
+            this.btnUpdateSLUG.Size = new System.Drawing.Size(168, 23);
+            this.btnUpdateSLUG.TabIndex = 2;
+            this.btnUpdateSLUG.Text = "Обработать slug";
+            this.btnUpdateSLUG.UseVisualStyleBackColor = true;
+            this.btnUpdateSLUG.Click += new System.EventHandler(this.btnUpdateSLUG_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(393, 346);
+            this.ClientSize = new System.Drawing.Size(351, 346);
+            this.Controls.Add(this.btnUpdateSLUG);
             this.Controls.Add(this.btnLoadNewProduct);
             this.Controls.Add(this.btnOpenAllProducts);
             this.Name = "Form1";
@@ -81,6 +93,7 @@
         private System.Windows.Forms.OpenFileDialog ofdNewProduct;
         private System.Windows.Forms.Button btnOpenAllProducts;
         private System.Windows.Forms.Button btnLoadNewProduct;
+        private System.Windows.Forms.Button btnUpdateSLUG;
     }
 }
 
