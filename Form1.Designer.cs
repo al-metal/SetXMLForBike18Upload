@@ -33,6 +33,7 @@
             this.btnOpenAllProducts = new System.Windows.Forms.Button();
             this.btnLoadNewProduct = new System.Windows.Forms.Button();
             this.btnUpdateSLUG = new System.Windows.Forms.Button();
+            this.tbHistory = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // ofdAllProducts
@@ -73,17 +74,27 @@
             this.btnUpdateSLUG.UseVisualStyleBackColor = true;
             this.btnUpdateSLUG.Click += new System.EventHandler(this.btnUpdateSLUG_Click);
             // 
+            // tbHistory
+            // 
+            this.tbHistory.Location = new System.Drawing.Point(12, 81);
+            this.tbHistory.Multiline = true;
+            this.tbHistory.Name = "tbHistory";
+            this.tbHistory.Size = new System.Drawing.Size(327, 253);
+            this.tbHistory.TabIndex = 3;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(351, 346);
+            this.Controls.Add(this.tbHistory);
             this.Controls.Add(this.btnUpdateSLUG);
             this.Controls.Add(this.btnLoadNewProduct);
             this.Controls.Add(this.btnOpenAllProducts);
             this.Name = "Form1";
             this.Text = "Подготовка файла для загрузки на сайт";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -94,6 +105,7 @@
         private System.Windows.Forms.Button btnOpenAllProducts;
         private System.Windows.Forms.Button btnLoadNewProduct;
         private System.Windows.Forms.Button btnUpdateSLUG;
+        private System.Windows.Forms.TextBox tbHistory;
     }
 }
 

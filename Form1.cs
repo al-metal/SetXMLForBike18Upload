@@ -1,8 +1,10 @@
-﻿using System;
+﻿using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -42,6 +44,8 @@ namespace SetXMLForBike18Upload
                 MessageBox.Show("Ошибка при выборе файла", "Ошибка файла");
                 return;
             }
+            fileUrlsAllProducts = ofdAllProducts.FileName.ToString();
+            fileUrlsNewProducts = ofdNewProduct.FileName.ToString();
 
             Thread tabl = new Thread(() => UpdateSLUG());
             forms = tabl;
@@ -52,6 +56,21 @@ namespace SetXMLForBike18Upload
         private void UpdateSLUG()
         {
             ControlsFormEnabledFalse();
+
+            tbHistory.Invoke(new Action(() => tbHistory.AppendText("Идет открытие выгрузки с сайта\n")));
+
+            FileInfo file = new FileInfo(fileUrlsAllProducts);
+            ExcelPackage p = new ExcelPackage(file);
+            ExcelWorksheet w = p.Workbook.Worksheets[1];
+            int q = w.Dimension.Rows;
+
+            tbHistory.Invoke(new Action(() => tbHistory.AppendText("Количество строк в файле = " + q + "\n")));
+
+            tbHistory.Invoke(new Action(() => tbHistory.AppendText("Идет открытие файла для загрузки\n")));
+
+            string[] newTovars = File.ReadAllLines(fileUrlsNewProducts, Encoding.GetEncoding(1251));
+
+            tbHistory.Invoke(new Action(() => tbHistory.AppendText("Количество строк в файле = " + newTovars.Length + "\n")));
 
             ControlsFormEnabledTrue();
         }
