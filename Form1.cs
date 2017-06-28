@@ -19,6 +19,8 @@ namespace SetXMLForBike18Upload
         string fileUrlsNewProducts;
         Thread forms;
 
+        int addCount = 0;
+
 
         public Form1()
         {
@@ -57,6 +59,8 @@ namespace SetXMLForBike18Upload
         {
             ControlsFormEnabledFalse();
 
+            bool edit = false;
+
             tbHistory.Invoke(new Action(() => tbHistory.AppendText("Идет открытие выгрузки с сайта\n")));
 
             FileInfo file = new FileInfo(fileUrlsAllProducts);
@@ -68,30 +72,80 @@ namespace SetXMLForBike18Upload
 
             tbHistory.Invoke(new Action(() => tbHistory.AppendText("Идет открытие файла для загрузки\n")));
 
-            string[] newTovars = File.ReadAllLines(fileUrlsNewProducts, Encoding.GetEncoding(1251));
+            List<string> allChpu = GetCHPU(w);
 
-            tbHistory.Invoke(new Action(() => tbHistory.AppendText("Количество строк в файле = " + newTovars.Length + "\n")));
+            p.Dispose();
+            do
+            {
+                
+                string[] newTovars = File.ReadAllLines(fileUrlsNewProducts, Encoding.GetEncoding(1251));
 
-            ActualSLUG(w, newTovars);
+                tbHistory.Invoke(new Action(() => tbHistory.AppendText("Количество строк в файле = " + newTovars.Length + "\n")));
 
+                edit = ActualSLUG(allChpu, newTovars);
+            }
+            while (edit);
+            
             ControlsFormEnabledTrue();
         }
 
-        private void ActualSLUG(ExcelWorksheet w, string[] newTovars)
+        private List<string> GetCHPU(ExcelWorksheet w)
         {
+            List<string> chpu = new List<string>();
             int countAllT = w.Dimension.Rows;
 
+            for (int n = 1; countAllT > n; n++)
+            {
+                string chpuAllT = (string)w.Cells[n, 15].Value;
+                chpu.Add(chpuAllT);
+            }
+
+            return chpu;
+        }
+
+        private bool ActualSLUG(List<string> allCHPU, string[] newTovars)
+        {
+            bool edit = false;
+            int countAllT = allCHPU.Count;
+                        
             for (int i = 1; newTovars.Length > i; i++)
             {
                 string[] newTovarStr = newTovars[i].ToString().Split(';');
                 string slugNewT = newTovarStr[newTovarStr.Length - 5];
+                string oldCHPU = slugNewT;
+                slugNewT = slugNewT.Replace("\"", "");
 
-                for(int n = 1; countAllT > n; n++)
+                for (int n = 1; countAllT > n; n++)
                 {
-                    string chpuAllT = (string)w.Cells[i, 3].Value;
+                    string newCHPU = slugNewT;
+                    string chpuAllT = allCHPU[n];
+                    if (newCHPU == chpuAllT)
+                    {
+                        UpdateCHPU(newTovars, newCHPU, oldCHPU, i);
+                        edit = true;
+                    }
                 }
-
             }
+            
+            return edit;
+        }
+
+        private void UpdateCHPU(string[] newTovars, string newCHPU, string oldCHPU, int i)
+        {
+            int slug = newCHPU.Length;
+            int countAdd = ReturnCountAdd();
+            int countDel = countAdd.ToString().Length;
+
+            countDel = countDel + 2;
+
+            newCHPU = newCHPU.Remove(slug - countDel);
+            newCHPU += countAdd;
+            newCHPU = newCHPU.Replace("”", "").Replace("~", "").Replace("#", "").Replace("?", "");
+
+            countDel = countDel - 2;
+
+            newTovars[i] = newTovars[i].Replace(oldCHPU, newCHPU);
+            File.WriteAllLines(fileUrlsNewProducts, newTovars, Encoding.GetEncoding(1251));
         }
 
         private void ControlsFormEnabledTrue()
@@ -106,6 +160,14 @@ namespace SetXMLForBike18Upload
             btnLoadNewProduct.Invoke(new Action(() => btnLoadNewProduct.Enabled = false));
             btnOpenAllProducts.Invoke(new Action(() => btnOpenAllProducts.Enabled = false));
             btnUpdateSLUG.Invoke(new Action(() => btnUpdateSLUG.Enabled = false));
+        }
+
+        public int ReturnCountAdd()
+        {
+            if (addCount == 99)
+                addCount = 0;
+            addCount++;
+            return addCount;
         }
     }
 }
