@@ -51,7 +51,23 @@ namespace SetXMLForBike18Upload
 
         private void UpdateSLUG()
         {
-            throw new NotImplementedException();
+            ControlsFormEnabledFalse();
+
+            ControlsFormEnabledTrue();
+        }
+
+        private void ControlsFormEnabledTrue()
+        {
+            btnLoadNewProduct.Invoke(new Action(() => btnLoadNewProduct.Enabled = true));
+            btnOpenAllProducts.Invoke(new Action(() => btnOpenAllProducts.Enabled = true));
+            btnUpdateSLUG.Invoke(new Action(() => btnUpdateSLUG.Enabled = true));
+        }
+
+        private void ControlsFormEnabledFalse()
+        {
+            btnLoadNewProduct.Invoke(new Action(() => btnLoadNewProduct.Enabled = false));
+            btnOpenAllProducts.Invoke(new Action(() => btnOpenAllProducts.Enabled = false));
+            btnUpdateSLUG.Invoke(new Action(() => btnUpdateSLUG.Enabled = false));
         }
     }
 }
