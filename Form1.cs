@@ -77,7 +77,7 @@ namespace SetXMLForBike18Upload
             p.Dispose();
             do
             {
-                
+
                 string[] newTovars = File.ReadAllLines(fileUrlsNewProducts, Encoding.GetEncoding(1251));
 
                 tbHistory.Invoke(new Action(() => tbHistory.AppendText("Количество строк в файле = " + newTovars.Length + "\n")));
@@ -85,7 +85,7 @@ namespace SetXMLForBike18Upload
                 edit = ActualSLUG(allChpu, newTovars);
             }
             while (edit);
-            
+
             ControlsFormEnabledTrue();
         }
 
@@ -107,7 +107,76 @@ namespace SetXMLForBike18Upload
         {
             bool edit = false;
             int countAllT = allCHPU.Count;
-                        
+
+            string[] newTovarsCopy = newTovars;
+            for (int m = 0; newTovarsCopy.Length > m; m++)
+            {
+                string[] TovarStr = newTovarsCopy[m].ToString().Split(';');
+                string slugTovar = TovarStr[TovarStr.Length - 5];
+                slugTovar = slugTovar.Replace("\"", "");
+                string numberString = "";
+                string[] strRepeat = null;
+
+                for (int z = 0; newTovars.Length > z; z++)
+                {
+                    string str = newTovars[z];
+                    string[] TovarStrNEW = str.Split(';');
+                    string slugTovarNEW = TovarStrNEW[TovarStrNEW.Length - 5];
+                    slugTovarNEW = slugTovarNEW.Replace("\"", "");
+
+                    if (slugTovar == slugTovarNEW && slugTovar != "ЧПУ страницы (slug)")
+                        numberString += z + ";";
+
+                    strRepeat = numberString.Split(';');
+                }
+                if (strRepeat.Length > 2 && strRepeat != null)
+                {
+                    if (strRepeat.Length == 3)
+                    {
+                        string number = strRepeat[1];
+                        string oldCHPU = slugTovar;
+                        int slug = slugTovar.Length;
+                        int countAdd = ReturnCountAdd();
+                        int countDel = countAdd.ToString().Length;
+
+                        countDel = countDel + 2;
+
+                        slugTovar = slugTovar.Remove(slug - countDel);
+                        slugTovar += countAdd;
+                        slugTovar = slugTovar.Replace("”", "").Replace("~", "").Replace("#", "").Replace("?", "");
+
+                        countDel = countDel - 2;
+
+                        newTovars[Convert.ToInt32(number)] = newTovars[Convert.ToInt32(number)].Replace(oldCHPU, slugTovar);
+                        File.WriteAllLines(fileUrlsNewProducts, newTovars, Encoding.GetEncoding(1251));
+                    }
+                    if (strRepeat.Length > 3)
+                    {
+                        for (int i = 0; strRepeat.Length > i; i++)
+                        {
+                            if (i == strRepeat.Length - 1)
+                                continue;
+                            string number = strRepeat[i];
+                            string oldCHPU = slugTovar;
+                            int slug = oldCHPU.Length;
+                            int countAdd = ReturnCountAdd();
+                            int countDel = countAdd.ToString().Length;
+
+                            countDel = countDel + 2;
+
+                            slugTovar = slugTovar.Remove(slug - countDel);
+                            slugTovar += countAdd;
+                            slugTovar = slugTovar.Replace("”", "").Replace("~", "").Replace("#", "").Replace("?", "");
+
+                            countDel = countDel - 2;
+
+                            newTovars[Convert.ToInt32(number)] = newTovars[Convert.ToInt32(number)].Replace(oldCHPU, slugTovar);
+                            File.WriteAllLines(fileUrlsNewProducts, newTovars, Encoding.GetEncoding(1251));
+                        }
+                    }
+                }
+            }
+
             for (int i = 1; newTovars.Length > i; i++)
             {
                 string[] newTovarStr = newTovars[i].ToString().Split(';');
@@ -126,7 +195,6 @@ namespace SetXMLForBike18Upload
                     }
                 }
             }
-            
             return edit;
         }
 
