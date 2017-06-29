@@ -141,13 +141,13 @@ namespace SetXMLForBike18Upload
 
                         countDel = countDel + 2;
 
-                        slugTovar = slugTovar.Remove(slug - countDel);
-                        slugTovar += countAdd;
-                        slugTovar = slugTovar.Replace("”", "").Replace("~", "").Replace("#", "").Replace("?", "");
+                        oldCHPU = oldCHPU.Remove(slug - countDel);
+                        oldCHPU += countAdd;
+                        oldCHPU = oldCHPU.Replace("”", "").Replace("~", "").Replace("#", "").Replace("?", "");
 
                         countDel = countDel - 2;
 
-                        newTovars[Convert.ToInt32(number)] = newTovars[Convert.ToInt32(number)].Replace(oldCHPU, slugTovar);
+                        newTovars[Convert.ToInt32(number)] = newTovars[Convert.ToInt32(number)].Replace(slugTovar, oldCHPU);
                         File.WriteAllLines(fileUrlsNewProducts, newTovars, Encoding.GetEncoding(1251));
                     }
                     if (strRepeat.Length > 3)
@@ -164,13 +164,13 @@ namespace SetXMLForBike18Upload
 
                             countDel = countDel + 2;
 
-                            slugTovar = slugTovar.Remove(slug - countDel);
-                            slugTovar += countAdd;
-                            slugTovar = slugTovar.Replace("”", "").Replace("~", "").Replace("#", "").Replace("?", "");
+                            oldCHPU = oldCHPU.Remove(slug - countDel);
+                            oldCHPU += countAdd;
+                            oldCHPU = oldCHPU.Replace("”", "").Replace("~", "").Replace("#", "").Replace("?", "");
 
                             countDel = countDel - 2;
 
-                            newTovars[Convert.ToInt32(number)] = newTovars[Convert.ToInt32(number)].Replace(oldCHPU, slugTovar);
+                            newTovars[Convert.ToInt32(number)] = newTovars[Convert.ToInt32(number)].Replace(slugTovar, oldCHPU);
                             File.WriteAllLines(fileUrlsNewProducts, newTovars, Encoding.GetEncoding(1251));
                         }
                     }
