@@ -21,10 +21,44 @@ namespace SetXMLForBike18Upload
 
         int addCount = 0;
 
+        Dictionary<string, string> simbols = new Dictionary<string, string>();
 
         public Form1()
         {
             InitializeComponent();
+            simbols.Add(" ", "-");
+            simbols.Add("!", "-");
+            simbols.Add("@", "-");
+            simbols.Add("#", "-");
+            simbols.Add("$", "-");
+            simbols.Add("%", "-");
+            simbols.Add("^", "-");
+            simbols.Add("&", "-");
+            simbols.Add("*", "-");
+            simbols.Add("(", "-");
+            simbols.Add(")", "-");
+            simbols.Add("=", "-");
+            simbols.Add("\"", "-");
+            simbols.Add("№", "-");
+            simbols.Add(";", "-");
+            simbols.Add(":", "-");
+            simbols.Add("?", "-");
+            simbols.Add("+", "-");
+            simbols.Add("{", "-");
+            simbols.Add("}", "-");
+            simbols.Add("[", "-");
+            simbols.Add("]", "-");
+            simbols.Add("|", "-");
+            simbols.Add("/", "-");
+            simbols.Add(",", "-");
+            simbols.Add(".", "-");
+            simbols.Add("  ", "-");
+            simbols.Add("_", "-");
+            simbols.Add("---", "-");
+            simbols.Add("~", "-");
+            simbols.Add("`", "-");
+            simbols.Add("·", "-");
+            simbols.Add("--", "-");
         }
 
         private void btnOpenAllProducts_Click(object sender, EventArgs e)
@@ -60,6 +94,7 @@ namespace SetXMLForBike18Upload
             ControlsFormEnabledFalse();
 
             bool edit = false;
+            string[] newTovars;
 
             tbHistory.Invoke(new Action(() => tbHistory.AppendText("Идет открытие выгрузки с сайта\n")));
 
@@ -75,18 +110,57 @@ namespace SetXMLForBike18Upload
             List<string> allChpu = GetCHPU(w);
 
             p.Dispose();
+
+            newTovars = File.ReadAllLines(fileUrlsNewProducts, Encoding.GetEncoding(1251));
+            tbHistory.Invoke(new Action(() => tbHistory.AppendText("Количество строк в файле = " + newTovars.Length + "\n")));
+
+            tbHistory.Invoke(new Action(() => tbHistory.AppendText("Удаление неликидных символов ЧПУ\n")));
+            DeleteSimbols(newTovars);
+            tbHistory.Invoke(new Action(() => tbHistory.AppendText("Удаление неликидных символов ЧПУ завершено\n")));
+
             do
             {
-
-                string[] newTovars = File.ReadAllLines(fileUrlsNewProducts, Encoding.GetEncoding(1251));
-
-                tbHistory.Invoke(new Action(() => tbHistory.AppendText("Количество строк в файле = " + newTovars.Length + "\n")));
-
+                newTovars = File.ReadAllLines(fileUrlsNewProducts, Encoding.GetEncoding(1251));
                 edit = ActualSLUG(allChpu, newTovars);
             }
             while (edit);
 
             ControlsFormEnabledTrue();
+        }
+
+        private void DeleteSimbols(string[] newTovars)
+        {
+            for(int i = 1; newTovars.Length > i; i++)
+            {
+                string[] tovarStr = newTovars[i].ToString().Split(';');
+                string slug = tovarStr[tovarStr.Length - 5].Replace("\"", "");
+
+                string newSlug = UpdadeSlug(slug);
+
+                newTovars[i] = newTovars[i].Replace(slug, newSlug);
+                File.WriteAllLines(fileUrlsNewProducts, newTovars, Encoding.GetEncoding(1251));
+            }
+        }
+
+        private string UpdadeSlug(string slug)
+        {
+            foreach (KeyValuePair<string, string> pair in simbols)
+            {
+                slug = slug.Replace(pair.Key, pair.Value);
+            }
+
+            bool b = false;
+            do
+            {
+                b = false;
+                int lastIndex = slug.LastIndexOf('_');
+                if (lastIndex == slug.Length - 1)
+                    b = true;
+                if (b)
+                    slug = slug.Remove(slug.Length - 1);
+
+            } while (b);
+            return slug;
         }
 
         private List<string> GetCHPU(ExcelWorksheet w)
